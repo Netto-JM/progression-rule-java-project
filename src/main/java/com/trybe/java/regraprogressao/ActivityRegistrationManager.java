@@ -1,5 +1,6 @@
 package com.trybe.java.regraprogressao;
 
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 /**
@@ -21,6 +22,29 @@ import java.util.Scanner;
 public class ActivityRegistrationManager {
 
   /**
+   * Informs the results based on the provided total grade and total weigh.
+   *
+   * @param totalGrade The total grade obtained.
+   * @param totalWeigh The total weigh of activities.
+   */
+  public static void informResults(float totalGrade, float totalWeigh) {
+    DecimalFormat df = new DecimalFormat("#.#");
+    float finalGrade = totalGrade / totalWeigh;
+    finalGrade = Float.parseFloat(df.format(finalGrade).replace(',', '.'));
+    String congratsMessage = "Parabéns! Você alcançou " + finalGrade + "%! "
+        + "E temos o prazer de informar que você obteve aprovação!";
+    String sorryMessage = "Lamentamos informar que, com base na sua pontuação "
+        + "alcançada neste período, " + finalGrade + "%, você não atingiu a "
+        + "pontuação mínima necessária para sua aprovação.";
+
+    if (finalGrade >= 85) {
+      System.out.println(congratsMessage);
+    } else {
+      System.out.println(sorryMessage);
+    }
+  }
+
+  /**
    * Collects information about a specified number of activities from the user.
    * Activities include their names, weights, and grades.
    * <p>
@@ -39,6 +63,9 @@ public class ActivityRegistrationManager {
     String activityWeighScan;
     int activityGrade;
     String activityGradeScan;
+    float totalGrade = 0.00f;
+    float totalWeigh = 0.00f;
+
 
     System.out.println("Digite a quantidade de atividades para cadastrar:");
     String activityQuantityScan = scanControl.nextLine();
@@ -53,7 +80,11 @@ public class ActivityRegistrationManager {
       System.out.println("Digite a nota obtida para " + activityName + ":");
       activityGradeScan = scanControl.nextLine();
       activityGrade = Integer.parseInt(activityGradeScan);
+      totalGrade += (float) (activityGrade * activityWeigh);
+      totalWeigh += (float) activityWeigh;
     }
+
+    informResults(totalGrade, totalWeigh);
 
     scanControl.close();
   }
